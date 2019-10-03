@@ -29,6 +29,7 @@ function lazerLoop() {
         }
     }
 }
+
 function asteroidLoop() {
     for (asteroid in asteroids) {
         if (asteroids.hasOwnProperty(asteroid)) {
@@ -48,22 +49,17 @@ function asteroidLoop() {
 }
 
 function writeScore() {
-    ctx.save()
-    ctx.font = scoreSize + "px Arial";
-    ctx.fillStyle = "red";
-    ctx.textAlign = "center";
-    ctx.fillText(score, c.width / 2, scoreSize);
-    ctx.restore()
+    var x = c.width / 2
+    writeText("Score: " + score, x, scoreSize, scoreSize)
 }
 
-function draw() {
-    ctx.clearRect(0, 0, c.width, c.height)
-    writeScore();
+function drawShip() {
     ship.update();
     if (esp) {
         collisionBox(ship.position.x, ship.position.y, ship.r)
     }
 }
+
 function noAsteroids() {
     if (!asteroids.length) {
         createAsteroids();
@@ -80,16 +76,44 @@ function drawHearts() {
     var offset = 1.5
     // Create hearts
     for (i = 0; i < lives; i++) {
-        heart.display(size +((size * i) * offset), size, size)
+        heart.display(size + ((size * i) * offset), size, size)
     }
 }
 
-function gameLoop() {
-    draw();
+function end(won) {
+    var x = c.width / 2
+    var y = c.height / 2
+    var s = 100;
+    if (won) {
+        writeText("You Won!", x, y, s)
+        writeText("Score: " + score, x, y + s / 2, s / 2)
+        writeText("Press Escape To Restart", x, y + s / 1.3, s / 5)
+    } else {
+        writeText("You Lost!", x, y, s)
+        writeText("Score: " + score, x, y + s / 2, s / 2)
+        writeText("Press Escape To Restart", x, y + s / 1.3, s / 5)
+    }
+    if(pressedKeys.escape){
+        game.restart()
+        return;
+    }
+    request = window.requestAnimationFrame(function() {end(won)});
+}
+
+function draw(){
+    drawShip();
     drawHearts();
+    writeScore();
+}
+
+function gameLoop() {
+    ctx.clearRect(0, 0, c.width, c.height)
     lazerLoop();
     asteroidLoop();
     noAsteroids();
+    if(resets >= 10) game.win();
+    draw();
+    if(game.paused) return;
     request = window.requestAnimationFrame(gameLoop);
 }
 game.start();
