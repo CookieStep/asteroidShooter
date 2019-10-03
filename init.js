@@ -16,8 +16,14 @@ var asteroids = [];
 // Used to keep track of where the asteroid or laser is in the array above
 var laserIDs = []
 var asteroidIDs = []
+
+// An array of asteroids needed to be destroyed (Otherwise there will be flickering issues)
+var asteroidsToDestroy = []
 // Animation frame handler
 var request;
+
+// Sets the score to 0
+var score = 0;
 
 // Config
 var distMultiplier = 5; // Asteroid spawn distance away from ship

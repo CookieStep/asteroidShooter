@@ -40,6 +40,7 @@ class Laser {
         laserIDs.push(this.id);
         var id = lasers.findIndex(e => (e.id == this.id))
         lasers.splice(id, 1);
+        return;
     }
     async update() {
         this.checkVelocity();

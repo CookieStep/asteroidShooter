@@ -104,12 +104,12 @@ class Asteroid {
             }
         }
         // If there's no collision return false
-        return false;
+        //return false;
     }
     // Check collision
     checkCollision() {
         // Checks if the asteroid is colliding with the laser
-        this.laserCollision();
+        if (this.laserCollision()) score++;
         // If the asteroid is colliding with the ship restart the game
         if (this.shipCollision()) game.restart(true);
     }
@@ -119,8 +119,7 @@ class Asteroid {
         asteroidIDs.push(this.id);
         // Gets the index of this asteroid using it's id
         var id = asteroids.findIndex(e => (e.id == this.id))
-        // Remove this asteroid from the array
-        asteroids.splice(id, 1);
+        asteroidsToDestroy.push(id);
         // If the asteroids size devided by 2 is bigger than 10 hense why I'm using radius
         if (this.r > 10) {
             // Create two asteroids and tell them they're splitting
@@ -143,9 +142,9 @@ class Asteroid {
         this.checkVelocity();
         // If the asteroid is off screen then warp it
         if (offScreen(this)) warp(this);
-        // Draws the asteroid
-        this.draw();
         // Check the collision
         this.checkCollision();
+        // Draws the asteroid
+        this.draw();
     }
 };
