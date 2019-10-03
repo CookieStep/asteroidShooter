@@ -153,7 +153,8 @@ class Ship {
     die() {
         if(!this.protected()){
             ship = new Ship(c.width / 2, c.height / 2, -10, 10);
-            lives--;
+            if(--lives == 0) game.lose();
+            return
         }
     }
     // Main update function for the ship
