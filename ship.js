@@ -17,6 +17,8 @@ class Ship {
             x: 0,
             y: 0
         }
+        this.protectionTime = 100;
+        this.protection = 0;
         this.canShoot = true;
         this.shootDelay = 0;
         this.maxShootDelay = 6;
@@ -97,14 +99,21 @@ class Ship {
         if (pressedKeys.space && this.canShoot) {
             // Shoot
             this.shoot();
+            if(this.protected()) this.protection = this.protectionTime;
         }
+    }
+    blink(){
+        var rem = this.protection % 20
+        if(rem >= 0 && rem <= 10) ctx.strokeStyle = 'black';
+        else ctx.strokeStyle = 'white';
     }
     // Draw event
     draw() {
         // Sets the canvas line width devided by 5 so the lines wouldn't be too thick or too thin
         ctx.lineWidth = this.r / 5;
         // Sets the color of the stroke to white
-        ctx.strokeStyle = 'white';
+        if(this.protected()) this.blink();
+        else ctx.strokeStyle = 'white';
         // Ships drawing coordinates based from 0
         var ship =
             [
@@ -133,8 +142,24 @@ class Ship {
             this.canShoot = true;
         }
     }
+
+    protected(add = false) {
+        if (this.protection < this.protectionTime) {
+            if(add) this.protection++;
+            return true;
+        }
+        return false;
+    }
+    die() {
+        if(!this.protected()){
+            ship = new Ship(c.width / 2, c.height / 2, -10, 10);
+            lives--;
+        }
+    }
     // Main update function for the ship
     update() {
+        // Check if the ship is protected
+        this.protected(true);
         // Draw the ship
         this.draw()
         // Check if the ship can shoot

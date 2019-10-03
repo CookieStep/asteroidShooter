@@ -77,6 +77,7 @@ class Asteroid {
         // If the asteroid and the ship are coliding
         if (distBetweenPoints(this.position.x, this.position.y, ship.position.x, ship.position.y) < this.size + ship.r) {
             // return true
+            if(ship.protected()) return false;
             return true;
         }
         // Else just return false
@@ -109,9 +110,9 @@ class Asteroid {
     // Check collision
     checkCollision() {
         // Checks if the asteroid is colliding with the laser
-        if (this.laserCollision()) score++;
+        if (this.laserCollision()) score += Math.round(this.size * 0.5);
         // If the asteroid is colliding with the ship restart the game
-        if (this.shipCollision()) game.restart(true);
+        if (this.shipCollision()) ship.die();
     }
     // Destroys the asteroid
     destroy() {

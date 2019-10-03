@@ -12,6 +12,7 @@ ship = new Ship(c.width / 2, c.height / 2, -10, 10);
 // Inizialize lasers and asteroids
 var lasers = [];
 var asteroids = [];
+var hearts = [];
 // Laser and asteroid id array (adds when an asteroid gets destroyed removes when a new one is created)
 // Used to keep track of where the asteroid or laser is in the array above
 var laserIDs = []
@@ -24,10 +25,19 @@ var request;
 
 // Sets the score to 0
 var score = 0;
+// The text size for score
+var scoreSize = 30;
+// How many times did you destroy all the asteroids
+var resets = 0;
+// lives
+var maxLives = 5;
+var lives = maxLives;
 
 // Config
 var distMultiplier = 5; // Asteroid spawn distance away from ship
-var maxAsteroids = 5
+var minAsteroids = 4 // Min asteroids that will be created
+var maxAsteroids = 10 // Max asteroids that will be created
+
 // Lines at the collision points
 var esp = false;
 
@@ -97,7 +107,8 @@ function distBetweenPoints(x1, y1, x2, y2) {
 
 // Create asteroids
 function createAsteroids() {
-    while (asteroids.length < maxAsteroids) { // While there are less asteroids than maxAsteroids
+    var randAsteroids = Math.ceil(Math.random()*(maxAsteroids-minAsteroids)+minAsteroids);
+    while (asteroids.length < randAsteroids) { // While there are less asteroids than maxAsteroids
         var s = (Math.random() * 40) + 30; // Random size (full size which means the radius is half of that)
         do {
             // Get a random x and y location anywhere on the canvas
@@ -223,6 +234,8 @@ var game = {
         lasers = [];
         // Clear asteroids
         asteroids = [];
+        // Resets the score
+        score = 0;
         // Cancel the next animation frame 
         window.cancelAnimationFrame(request)
         return;

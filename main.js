@@ -47,18 +47,49 @@ function asteroidLoop() {
     }
 }
 
+function writeScore() {
+    ctx.save()
+    ctx.font = scoreSize + "px Arial";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "center";
+    ctx.fillText(score, c.width / 2, scoreSize);
+    ctx.restore()
+}
+
 function draw() {
     ctx.clearRect(0, 0, c.width, c.height)
+    writeScore();
     ship.update();
     if (esp) {
         collisionBox(ship.position.x, ship.position.y, ship.r)
     }
 }
+function noAsteroids() {
+    if (!asteroids.length) {
+        createAsteroids();
+        resets++
+    }
+}
+
+// Create hearts
+function drawHearts() {
+    var heart = new Heart();
+    // Size of the hearts
+    var size = 20;
+    // Offset between hearts
+    var offset = 1.5
+    // Create hearts
+    for (i = 0; i < lives; i++) {
+        heart.display(size +((size * i) * offset), size, size)
+    }
+}
 
 function gameLoop() {
     draw();
+    drawHearts();
     lazerLoop();
     asteroidLoop();
+    noAsteroids();
     request = window.requestAnimationFrame(gameLoop);
 }
 game.start();
