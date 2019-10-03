@@ -41,6 +41,16 @@ var maxAsteroids = 10 // Max asteroids that will be created
 // Lines at the collision points
 var esp = false;
 
+// Writes text
+function writeText(text, x, y, textSize, font = 'Arial', color = 'white') {
+    ctx.save()
+    ctx.font = textSize + "px " + font;
+    ctx.fillStyle = color;
+    ctx.textAlign = "center";
+    ctx.fillText(text, x, y);
+    ctx.restore()
+}
+
 // Draw a shape using an array
 function drawShape(shape, close, x, y, scale, rot) {
     // shape = [x, y,
@@ -157,7 +167,8 @@ var pressedKeys = {
     right: false,
     up: false,
     down: false,
-    space: false
+    space: false,
+    escape: false
 }
 
 // The movement keymap A, S, D, W, SPACE(shoot)
@@ -166,7 +177,8 @@ let keyMap = {
     68: "right",
     87: "up",
     83: "down",
-    32: "space"
+    32: "space",
+    27: "escape"
 }
 // Triggered when a key is pressed down
 function keydown(event) {
@@ -214,6 +226,7 @@ var game = {
         if (this.running) return;
         // Set running to true
         this.running = true;
+        this.paused = false;
         // Create asteroids
         createAsteroids();
         // Set the ship in the middle
@@ -236,6 +249,10 @@ var game = {
         asteroids = [];
         // Resets the score
         score = 0;
+        // Resets the lives
+        lives = maxLives;
+        // Reset resets
+        resets = 0;
         // Cancel the next animation frame 
         window.cancelAnimationFrame(request)
         return;
@@ -265,5 +282,13 @@ var game = {
         // Starts back the game
         game.start(r);
         return;
+    },
+    win: function(){
+        game.pause();
+        end(true);
+    },
+    lose: function(){
+        game.pause();
+        end(false);
     }
 }
