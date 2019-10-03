@@ -17,8 +17,8 @@ class Asteroid {
                     x: x + (s + i) * Math.cos((this.rotation - 90) * (Math.PI / 180)),
                     y: y + (s + i) * Math.sin((this.rotation - 90) * (Math.PI / 180))
                 }
-                // i + 0.1
-                i += 0.1
+                // i + 1
+                i += 1
                 // While they're coliding 
             } while (distBetweenPoints(this.position.x, this.position.y, asteroids[cid].position.x, asteroids[cid].position.y) < s + s);
         } else { // Else if split is false
@@ -128,16 +128,24 @@ class Asteroid {
             createAsteroid(this.position.x, this.position.y, this.r, true);
         };
     }
+    // Draw
     draw() {
+        // Sets the line width
         ctx.lineWidth = this.size / 10;
+        // Sets the stroke color
         ctx.strokeStyle = 'white';
-        var asteroid = this.asteroid;
-        drawShape(asteroid, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation + 0.35);
+        // Draws the asteroid
+        drawShape(this.asteroid, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation + 0.35);
     }
+    // Main update of the asteroid
     async update() {
+        // Ckechs the velocity
         this.checkVelocity();
-        this.draw();
+        // If the asteroid is off screen then warp it
         if (offScreen(this)) warp(this);
+        // Draws the asteroid
+        this.draw();
+        // Check the collision
         this.checkCollision();
     }
 };

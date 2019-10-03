@@ -1,12 +1,15 @@
+// Creates a new class Called Asteroid
 class Laser {
-    constructor(x, y, s, rot, id) {
+    // Defines all the functions and is called by using new Ship(x, y, size, rotation, id)
+    constructor(x, y, s, rot, id, or) {
         this.id = id;
         this.rotation = rot
         this.size = s;
         this.r = this.size / 2;
+        // Sets the poition of the bullet outside of the radius of the object calling it
         this.position = {
-            x: x + Math.cos((this.rotation - 90) * (Math.PI / 180)) * ship.r,
-            y: y + Math.sin((this.rotation - 90) * (Math.PI / 180)) * ship.r
+            x: x + Math.cos((this.rotation - 90) * (Math.PI / 180)) * or,
+            y: y + Math.sin((this.rotation - 90) * (Math.PI / 180)) * or
         }
         this.age = 0;
         this.maxAge = 80//Math.random() * 60 + 40

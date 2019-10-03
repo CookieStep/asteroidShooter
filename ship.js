@@ -62,7 +62,7 @@ class Ship {
         // Create the laser on the ships position 
         // Give it the ships rotation
         // Make it half of the ships size aka give it the ships radius
-        createLaser(this.position.x, this.position.y, this.r, this.rotation)
+        createLaser(this.position.x, this.position.y, this.r, this.rotation, this.r)
         // Disable the ship from shooting
         this.canShoot = false;
     }

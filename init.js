@@ -105,14 +105,14 @@ function createAsteroids() {
 }
 
 // Create a laser
-function createLaser(x, y, s, rot){
+function createLaser(x, y, s, rot, or){
     var id; // Defining the variable id
     if (!laserIDs.length) { // If laserIDs is empty
         id = lasers.length + 1 // id is equal to total lasers +1
     } else { // Else if it's not empty
         id = laserIDs.shift(); // Shift the first index from laserIDs to id
     }
-    lasers.push(new Laser(x, y, s, rot, id)) // Create a new laser with the given information
+    lasers.push(new Laser(x, y, s, rot, id, or)) // Create a new laser with the given information
 }
 
 // Function that creates the asteroid
