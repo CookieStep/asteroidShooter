@@ -41,7 +41,7 @@ class Asteroid {
         // Gets a random amount of points from 5 to 17
         this.points = (Math.random() * 14) + 5
         // Sets the speed of the asteroid
-        this.speed = 2;
+        this.speed = 2 + resets;
         // Calls the drawAsteroid() function and sets asteroid as the values returned form the function
         this.asteroid = this.drawAsteroid();
     }
