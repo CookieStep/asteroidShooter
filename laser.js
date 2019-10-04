@@ -37,7 +37,7 @@ class Laser {
         this.checkVelocity();
         this.draw();
         //if (offScreen(this)) warp(this);
-        if (offScreen(this)) this.destroy();
-        if(++this.age == this.maxAge) this.destroy();
+        if (offScreen(this)) game.warp ? warp(this) : this.destroy();
+        if(++this.age == this.maxAge && !game.superman) this.destroy();
     }
 };

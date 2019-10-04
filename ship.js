@@ -52,9 +52,9 @@ class Ship {
         if (this.velocity.y < this.minVel) this.velocity.y = this.minVel
 
         // If the rotation is bigger than 360 set it to 0
-        if (this.rotation > 360) this.rotation = 0;
+        if (this.rotation > 360) this.rotation = this.rotation - 360;
         // If the rotation is lower than 0 set it to 360
-        else if (this.rotation < 0) this.rotation = 360
+        else if (this.rotation < 0) this.rotation = 360 + this.rotation;
 
         // Apply velocity to the position
         this.position.x += this.velocity.x
@@ -96,7 +96,7 @@ class Ship {
             this.rotation += this.speed * this.multiplier;
         }
         // If space is pressed and the ship can shoot
-        if (pressedKeys.space && this.canShoot) {
+        if (pressedKeys.space && (this.canShoot || game.superman)) {
             // Shoot
             this.shoot();
             if (this.protected()) this.protection = this.protectionTime;
@@ -146,9 +146,17 @@ class Ship {
         }
         return false;
     }
+    deathParticles(){
+        for (i = 0; i < 360; i++) {
+            if (i % 15 == 0) {
+                createParticle(this.position.x, this.position.y, 5, i, 20, 5)
+            }
+        }
+    }
     die() {
         if (!this.protected()) {
-            ship = new Ship(c.width / 2, c.height / 2, -10, 10);
+            this.deathParticles();
+            createShip(c.width / 2, c.height / 2, -10, 10)
             if (--lives == 0) game.lose();
             return
         }
@@ -169,3 +177,7 @@ class Ship {
         if (offScreen(this)) warp(this);
     }
 };
+
+function createShip(x, y, minv, maxv){
+    ship = new Ship(x, y, minv, maxv, game.superman);
+}

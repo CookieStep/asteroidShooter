@@ -68,13 +68,14 @@ function drawShip() {
 
 function noAsteroids() {
     if (!asteroids.length) {
-        createAsteroids();
         resets++
+        createAsteroids();
     }
 }
 
 // Create hearts
 function drawHearts() {
+    if(game.superman) return;
     var heart = new Heart();
     // Size of the hearts
     var size = 20;
@@ -124,7 +125,7 @@ async function gameLoop() {
     lazerLoop();
     asteroidLoop();
     noAsteroids();
-    if (resets >= 10) game.win();
+    if (resets >= 10 && !game.infinite) game.win();
     draw();
     if (game.paused) return;
     request = window.requestAnimationFrame(gameLoop);

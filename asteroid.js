@@ -83,7 +83,7 @@ class Asteroid {
             // If the laser and the asteroid are colliding
             if (distBetweenPoints(this.position.x, this.position.y, x, y) < this.size + r) {
                 // Destroy the laser and the asteroid
-                las.destroy();
+                game.superman ? 0 : las.destroy();
                 this.destroy();
                 return true;
             }
@@ -96,15 +96,18 @@ class Asteroid {
         // Checks if the asteroid is colliding with the laser
         if (this.laserCollision()) score += Math.round(this.size * 0.5);
         // If the asteroid is colliding with the ship restart the game
-        if (this.shipCollision()) ship.die();
+        if (this.shipCollision() && !game.superman) {
+            ship.die()
+            this.destroy();
+        };
     }
     // Destroy particles
     destroyParticles() {
         var i, j;
-        for (j = 0; j < this.r/2; j++) {
+        for (j = 0; j < this.r / 2; j++) {
             for (i = 0; i < 360; i++) {
                 if (i % 15 == 0) {
-                    createParticle(this.position.x, this.position.y, 5, i, 20%j, 5+j)
+                    createParticle(this.position.x, this.position.y, 5, i, 20 % j, 5 + j)
                 }
             }
         }

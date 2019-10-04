@@ -28,7 +28,8 @@ var request;
 var score = 0;
 // The text size for score
 var scoreSize = 30;
-// How many times did you destroy all the asteroids
+// A win state for the game +1 reset every time you destroy all the asteroids
+var maxResets = 20
 var resets = 0;
 // lives
 var maxLives = 5;
@@ -228,6 +229,12 @@ var game = {
     // Is the game paused
     paused: false,
     running: false,
+    // Infinite mode of the game
+    infinite: false,
+    // Superman mode (no shoot delay, no collision, no hearts)
+    superman: false,
+    // Warp the bullet
+    warp: false,
     // Start the game
     start: function (r) {
         // If the game is already running don't do anything
