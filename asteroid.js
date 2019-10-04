@@ -101,9 +101,9 @@ class Asteroid {
     // Destroy particles
     destroyParticles() {
         var i, j;
-        for (j = 0; j < this.size/2; j++) {
+        for (j = 0; j < this.r/2; j++) {
             for (i = 0; i < 360; i++) {
-                if (i % 10 == 0) {
+                if (i % 15 == 0) {
                     createParticle(this.position.x, this.position.y, 5, i, 20%j, 5+j)
                 }
             }

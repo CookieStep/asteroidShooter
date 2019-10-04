@@ -116,7 +116,7 @@ function draw() {
 var start = Date.now();
 
 async function gameLoop() {
-    if (Date.now() - start < 60) {
+    if (Date.now() - start < 30) {
         request = window.requestAnimationFrame(gameLoop);
         return;
     }else start = Date.now();
