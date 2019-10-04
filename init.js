@@ -38,7 +38,7 @@ var lives = maxLives;
 // Config
 var distMultiplier = 5; // Asteroid spawn distance away from ship
 var minAsteroids = 4 // Min asteroids that will be created
-var maxAsteroids = 10 // Max asteroids that will be created
+var maxAsteroids = 10 + resets // Max asteroids that will be created
 
 // Lines at the collision points
 var esp = false;
