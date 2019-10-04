@@ -3,8 +3,8 @@ var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
 // Define canvas height and width
-c.width = 1024;
-c.height = 768;
+c.width = window.innerWidth;
+c.height = window.innerHeight;
 
 // Create ship
 ship = new Ship(c.width / 2, c.height / 2, -10, 10);
