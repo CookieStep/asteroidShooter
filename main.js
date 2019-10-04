@@ -69,21 +69,29 @@ function drawShip() {
 function noAsteroids() {
     if (!asteroids.length) {
         resets++
+        lives++
         createAsteroids();
     }
 }
 
 // Create hearts
 function drawHearts() {
-    if(game.superman) return;
+    if (game.superman) return;
     var heart = new Heart();
     // Size of the hearts
     var size = 20;
     // Offset between hearts
-    var offset = 1.5
+    var offset = 1.5;
+    // Defines the row and collum
+    var row = 0;
+    var col = 0;
     // Create hearts
     for (i = 0; i < lives; i++) {
-        heart.display(size + ((size * i) * offset), size, size)
+        if (i % Math.round((c.width/size)/4) == 0) {
+            row = 0
+            col++
+        }else row++;
+        heart.display(size + ((size * row) * offset),(size * col) * offset + offset , size)
     }
 }
 
@@ -120,7 +128,7 @@ async function gameLoop() {
     if (Date.now() - start < 30) {
         request = window.requestAnimationFrame(gameLoop);
         return;
-    }else start = Date.now();
+    } else start = Date.now();
     ctx.clearRect(0, 0, c.width, c.height)
     lazerLoop();
     asteroidLoop();
