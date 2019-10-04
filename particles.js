@@ -1,10 +1,12 @@
 class Particle {
-    constructor(x, y, s, rot, speed, lifeSpan, shape, id) {
+    constructor(x, y, s, rot, speed, lifeSpan, shape, redraw, id) {
         this.id = id;
+        this.shape = shape;
+        this.redraw = redraw;
         this.x = x;
         this.y = y;
         this.size = s;
-        this.r = s / s;
+        this.r = s / 2;
         this.lifeTime = 0;
         this.lifeSpan = lifeSpan;
         this.speed = speed
@@ -19,23 +21,24 @@ class Particle {
         this.y += this.velocity.y
     }
     destroy() {
-        particles.push(this.id);
+        particleIDs.push(this.id);
         // Gets the index of this asteroid using it's id
         var id = particles.findIndex(e => (e.id == this.id))
         destroyParticles.push(id);
     };
+
     draw() {
         ctx.lineWidth = this.r / 10;
         ctx.strokeStyle = 'white';
-        var laser =
-            [
-                0, this.r,
-                -this.r / 2, this.r,
-                -this.r / 2, -this.r,
-                this.r / 2, -this.r,
-                this.r / 2, this.r
-            ]
-        drawShape(laser, true, this.x, this.y, 1, (Math.PI / 180) * this.rot);
+        if(this.shape){
+            if(this.redraw){
+                drawShape(new Shapes(this.r).asteroid, true, this.x, this.y, 1, (Math.PI / 180) * this.rot);
+            }else{
+                drawShape(this.shape, true, this.x, this.y, 1, (Math.PI / 180) * this.rot);
+            }
+        }else{
+            ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        }
     };
     update() {
         this.applyVelocity();
@@ -46,16 +49,17 @@ class Particle {
 }
 
 particles = [];
+particleIDs = [];
 destroyParticles = [];
 
-function createParticle(x, y, s, rot, speed, lifeSpan, shape) {
+function createParticle(x, y, s, rot, speed, lifeSpan, shape, redraw) {
     var id;
-    if (!destroyParticles.length) {
+    if (!particleIDs.length) {
         id = particles.length + 1
     } else {
-        id = destroyParticles.shift();
+        id = particleIDs.shift();
     }
-    particles.push(new Particle(x, y, s, rot, speed, lifeSpan, shape, id))
+    particles.push(new Particle(x, y, s, rot, speed, lifeSpan, shape, redraw, id))
 }
 
 function drawParticles() {

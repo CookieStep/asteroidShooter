@@ -26,15 +26,7 @@ class Laser {
     draw() {
         ctx.lineWidth = this.r / 10;
         ctx.strokeStyle = 'white';
-        var laser =
-            [
-                0, this.r,
-                -this.r / 2, this.r,
-                -this.r / 2, -this.r,
-                this.r / 2, -this.r,
-                this.r / 2, this.r
-            ]
-        drawShape(laser, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
+        drawShape(new Shapes(this.size).laser, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
     }
     destroy() {
         laserIDs.push(this.id);

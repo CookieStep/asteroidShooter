@@ -43,23 +43,7 @@ class Asteroid {
         // Sets the speed of the asteroid
         this.speed = 2 + resets;
         // Calls the drawAsteroid() function and sets asteroid as the values returned form the function
-        this.asteroid = this.drawAsteroid();
-    }
-    // Draws the asteroid with random points
-    drawAsteroid() {
-        // New asteroid array that we'll temporarely save the array of the asteroid to
-        var asteroid = [];
-
-        // For every point get the x and y coordinates and save them in the temporary array
-        for (var i = 1; i <= this.points; i += 1) {
-            // Random offset for the points which moves them closer or further away from the center
-            var offset = Math.random() * this.distortion * 2 + 1 - this.distortion;
-            // Push the x and y to the temporary array
-            asteroid.push((this.size * offset) * Math.cos(i * 2 * Math.PI / this.points)); //x
-            asteroid.push((this.size * offset) * Math.sin(i * 2 * Math.PI / this.points)); //y
-        }
-        // Return the temporary array to the caller
-        return asteroid;
+        this.asteroid = new Shapes(this.size, this.points, this.distortion).asteroid;
     }
     // Checks the velocity
     checkVelocity() {

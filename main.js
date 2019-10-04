@@ -104,8 +104,7 @@ function draw(){
     drawShip();
     drawHearts();
     writeScore();
-    //createParticle(500, 500, 50, 45, 20, 50, false)
-    //drawParticles();
+    drawParticles();
 }
 
 function gameLoop() {

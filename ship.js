@@ -99,12 +99,12 @@ class Ship {
         if (pressedKeys.space && this.canShoot) {
             // Shoot
             this.shoot();
-            if(this.protected()) this.protection = this.protectionTime;
+            if (this.protected()) this.protection = this.protectionTime;
         }
     }
-    blink(){
+    blink() {
         var rem = this.protection % 20
-        if(rem >= 0 && rem <= 10) ctx.strokeStyle = 'black';
+        if (rem >= 0 && rem <= 10) ctx.strokeStyle = 'black';
         else ctx.strokeStyle = 'white';
     }
     // Draw event
@@ -112,20 +112,16 @@ class Ship {
         // Sets the canvas line width devided by 5 so the lines wouldn't be too thick or too thin
         ctx.lineWidth = this.r / 5;
         // Sets the color of the stroke to white
-        if(this.protected()) this.blink();
+        if (this.protected()) this.blink();
         else ctx.strokeStyle = 'white';
-        // Ships drawing coordinates based from 0
-        var ship =
-            [
-                0, 0,
-                -this.r / 2, this.r,
-                -this.r, this.r,
-                0, -this.r,
-                this.r, this.r,
-                this.r / 2, this.r
-            ]
+        // Creates particles
+        if (this.thrusting) {
+            var randRot = (this.rotation + Math.random() * 35 + 165) % 360
+            var thrustParticles = new Shapes(this.r/2).asteroid
+            createParticle(this.position.x, this.position.y, 5, randRot, 15, 50, thrustParticles, true)
+        }
         // Draw the ship on the ships coordinates and rotated 
-        drawShape(ship, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
+        drawShape(new Shapes(this.size).ship, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
     }
     // Check if the ship can shoot
     shootCheck() {
@@ -145,15 +141,15 @@ class Ship {
 
     protected(add = false) {
         if (this.protection < this.protectionTime) {
-            if(add) this.protection++;
+            if (add) this.protection++;
             return true;
         }
         return false;
     }
     die() {
-        if(!this.protected()){
+        if (!this.protected()) {
             ship = new Ship(c.width / 2, c.height / 2, -10, 10);
-            if(--lives == 0) game.lose();
+            if (--lives == 0) game.lose();
             return
         }
     }
