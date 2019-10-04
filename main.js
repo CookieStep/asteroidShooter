@@ -99,28 +99,34 @@ function end(won) {
         writeText("Score: " + score, x, y + s / 2, s / 2)
         writeText("Press Escape To Restart", x, y + s / 1.3, s / 5)
     }
-    if(pressedKeys.escape){
+    if (pressedKeys.escape) {
         game.restart()
         return;
     }
-    request = window.requestAnimationFrame(function() {end(won)});
+    request = window.requestAnimationFrame(function () { end(won) });
 }
 
-function draw(){
+function draw() {
     drawShip();
     drawHearts();
     writeScore();
     drawParticles();
 }
 
-function gameLoop() {
+var start = Date.now();
+
+async function gameLoop() {
+    if (Date.now() - start < 60) {
+        request = window.requestAnimationFrame(gameLoop);
+        return;
+    }else start = Date.now();
     ctx.clearRect(0, 0, c.width, c.height)
     lazerLoop();
     asteroidLoop();
     noAsteroids();
-    if(resets >= 10) game.win();
+    if (resets >= 10) game.win();
     draw();
-    if(game.paused) return;
+    if (game.paused) return;
     request = window.requestAnimationFrame(gameLoop);
 }
 game.start();
