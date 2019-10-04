@@ -208,12 +208,19 @@ function lostFocus() {
     }
 }
 
+function resizeCanvas(){
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+}
+
 // Call keydown() while a key is pressed
 window.addEventListener("keydown", keydown, false);
 // Call keyup() when a key is released
 window.addEventListener("keyup", keyup, false);
 // Call lostFocus() on focus loss
 window.addEventListener("blur", lostFocus);
+// Calls resizeCanva() on window resize
+window.addEventListener("resize", resizeCanvas);
 
 // Main game handler
 var game = {
