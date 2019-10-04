@@ -19,7 +19,8 @@ var laserIDs = []
 var asteroidIDs = []
 
 // An array of asteroids needed to be destroyed (Otherwise there will be flickering issues)
-var asteroidsToDestroy = []
+var asteroidsToDestroy = [];
+var lasersidsToDestroy = [];
 // Animation frame handler
 var request;
 
