@@ -28,6 +28,12 @@ function lazerLoop() {
             }
         }
     }
+    while (lasersidsToDestroy.length) {
+        // Removes all the lasers
+        var id = lasersidsToDestroy.pop()
+        // Remove this laser from the array
+        lasers.splice(id, 1);
+    }
 }
 
 function asteroidLoop() {

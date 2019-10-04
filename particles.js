@@ -37,7 +37,9 @@ class Particle {
                 drawShape(this.shape, true, this.x, this.y, 1, (Math.PI / 180) * this.rot);
             }
         }else{
+            ctx.beginPath();
             ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+            ctx.stroke();
         }
     };
     update() {
@@ -69,9 +71,9 @@ function drawParticles() {
         }
     }
     while (destroyParticles.length) {
-        //Removes all the asteroids
+        // Removes all the particles
         var id = destroyParticles.pop()
-        // Remove this asteroid from the array
+        // Remove this particle from the array
         particles.splice(id, 1);
     }
 }

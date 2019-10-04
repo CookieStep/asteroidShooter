@@ -61,7 +61,7 @@ class Asteroid {
         // If the asteroid and the ship are coliding
         if (distBetweenPoints(this.position.x, this.position.y, ship.position.x, ship.position.y) < this.size + ship.r) {
             // return true
-            if(ship.protected()) return false;
+            if (ship.protected()) return false;
             return true;
         }
         // Else just return false
@@ -98,6 +98,17 @@ class Asteroid {
         // If the asteroid is colliding with the ship restart the game
         if (this.shipCollision()) ship.die();
     }
+    // Destroy particles
+    destroyParticles() {
+        var i, j;
+        for (j = 0; j < this.size/2; j++) {
+            for (i = 0; i < 360; i++) {
+                if (i % 10 == 0) {
+                    createParticle(this.position.x, this.position.y, 5, i, 20%j, 5+j)
+                }
+            }
+        }
+    }
     // Destroys the asteroid
     destroy() {
         // Push the id of this asteroid to asteroidIDs (To the last spot)
@@ -105,6 +116,7 @@ class Asteroid {
         // Gets the index of this asteroid using it's id
         var id = asteroids.findIndex(e => (e.id == this.id))
         asteroidsToDestroy.push(id);
+        this.destroyParticles();
         // If the asteroids size devided by 2 is bigger than 10 hense why I'm using radius
         if (this.r > 10) {
             // Create two asteroids and tell them they're splitting
