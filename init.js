@@ -230,7 +230,7 @@ var game = {
     paused: false,
     running: false,
     // Infinite mode of the game
-    infinite: false,
+    infinite: true,
     // Superman mode (no shoot delay, no collision, no hearts)
     superman: false,
     // Warp the bullet
