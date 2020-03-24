@@ -19,6 +19,8 @@ class Ship {
         }
         this.protectionTime = 100;
         this.protection = 0;
+        this.deadTime = 50;
+        this.dead = 0;
         this.canShoot = true;
         this.shootDelay = 0;
         this.maxShootDelay = 6;
@@ -67,6 +69,7 @@ class Ship {
         createLaser(this.position.x, this.position.y, this.r, this.rotation, this.r)
         // Disable the ship from shooting
         this.canShoot = false;
+        shoot.play()
     }
     // Check keys if you need to execute a function
     checkKeys() {
@@ -104,8 +107,13 @@ class Ship {
     }
     blink() {
         var rem = this.protection % 20
-        if (rem >= 0 && rem <= 10) ctx.strokeStyle = 'black';
-        else ctx.strokeStyle = 'white';
+        if (rem >= 0 && rem <= 10) {
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0)'
+            ctx.fillStyle = 'rgba(0, 0, 0, 0)'
+        }else{
+            ctx.strokeStyle = 'white'
+            ctx.fillStyle = 'lime'
+        };
     }
     // Draw event
     draw() {
@@ -113,14 +121,17 @@ class Ship {
         ctx.lineWidth = this.r / 5;
         // Sets the color of the stroke to white
         if (this.protected()) this.blink();
-        else ctx.strokeStyle = 'white';
+        else {
+            ctx.strokeStyle = 'white'
+            ctx.fillStyle = 'lime'
+        };
         // Creates particles
         if (this.thrusting) {
             var randRot = (this.rotation + Math.random() * 35 + 165) % 360
             var thrustParticles = new Shapes(this.r/2).asteroid
             createParticle(this.position.x, this.position.y, 5, randRot, 15, 50, thrustParticles, true)
         }
-        // Draw the ship on the ships coordinates and rotated 
+        // Draw the ship on the ships coordinates and rotated
         drawShape(new Shapes(this.size).ship, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
     }
     // Check if the ship can shoot
@@ -140,11 +151,14 @@ class Ship {
     }
 
     protected(add = false) {
-        if (this.protection < this.protectionTime) {
+        if (this.protection < this.protectionTime || this.dead < this.deadTime) {
             if (add) this.protection++;
             return true;
         }
         return false;
+    }
+    isDead() {
+        return this.dead < this.deadTime
     }
     deathParticles(){
         for (i = 0; i < 360; i++) {
@@ -154,7 +168,7 @@ class Ship {
         }
     }
     die() {
-        if (!this.protected()) {
+        if (!this.protected() && !this.isDead()) {
             this.deathParticles();
             createShip(c.width / 2, c.height / 2, -10, 10)
             if (--lives == 0) game.lose();
@@ -163,18 +177,22 @@ class Ship {
     }
     // Main update function for the ship
     update() {
-        // Check if the ship is protected
-        this.protected(true);
-        // Draw the ship
-        this.draw()
-        // Check if the ship can shoot
-        this.shootCheck();
-        // Check the keys
-        this.checkKeys();
-        // Check the velocity
-        this.checkVelocity();
-        // If it's off screen then warp to the other side
-        if (offScreen(this)) warp(this);
+        if(!this.isDead()) {
+            // Check if the ship is protected
+            this.protected(true);
+            // Draw the ship
+            this.draw()
+            // Check if the ship can shoot
+            this.shootCheck();
+            // Check the keys
+            this.checkKeys();
+            // Check the velocity
+            this.checkVelocity();
+            // If it's off screen then warp to the other side
+            if (offScreen(this)) warp(this);
+        }else{
+            this.dead++
+        }
     }
 };
 

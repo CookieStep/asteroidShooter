@@ -1,13 +1,13 @@
 function warp(object) {
-    if (object.position.x < 0 - object.size) {
-        object.position.x = c.width + object.size
-    } else if (object.position.x > c.width + object.size) {
-        object.position.x = 0 - object.size;
+    if (object.position.x < 0) {
+        object.position.x = c.width
+    } else if (object.position.x > c.width) {
+        object.position.x = 0;
     }
-    if (object.position.y < 0 - object.size) {
-        object.position.y = c.height + object.size
-    } else if (object.position.y > c.height + object.size) {
-        object.position.y = 0 - object.size;
+    if (object.position.y < 0) {
+        object.position.y = c.height
+    } else if (object.position.y > c.height) {
+        object.position.y = 0;
     }
 }
 
@@ -117,7 +117,6 @@ function end(won) {
 
 function draw() {
     drawShip();
-    drawHearts();
     writeScore();
     drawParticles();
 }
@@ -130,6 +129,7 @@ async function gameLoop() {
         return;
     } else start = Date.now();
     ctx.clearRect(0, 0, c.width, c.height)
+    drawHearts();
     lazerLoop();
     asteroidLoop();
     noAsteroids();
@@ -138,4 +138,4 @@ async function gameLoop() {
     if (game.paused) return;
     request = window.requestAnimationFrame(gameLoop);
 }
-game.start();
+game.start()

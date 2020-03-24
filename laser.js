@@ -24,8 +24,9 @@ class Laser {
         this.position.y += this.velocity.y
     }
     draw() {
-        ctx.lineWidth = this.r / 10;
+        ctx.lineWidth = this.r / 5;
         ctx.strokeStyle = 'white';
+        ctx.fillStyle = "blue"
         drawShape(new Shapes(this.size).laser, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation);
     }
     destroy() {
@@ -38,6 +39,6 @@ class Laser {
         this.draw();
         //if (offScreen(this)) warp(this);
         if (offScreen(this)) game.warp ? warp(this) : this.destroy();
-        if(++this.age == this.maxAge && !game.superman) this.destroy();
+        if(++this.age >= this.maxAge && !game.superman) this.destroy();
     }
 };

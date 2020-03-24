@@ -4,14 +4,18 @@ class Asteroid {
     constructor(x, y, s, id, split = false, cid) {
         // Random rotation from 0 to 360
         this.rotation = Math.random() * 360;
+        this.rotation2 = this.rotation
+        this.rotate = Math.random() * 5 - 2.5
         // If split is true
         if (split) {
+            this.rotate *= 2
             // Define variable i with the value of 0
             var i = 0
             // Do this code
             do {
                 // get's a random rotation from 0 to 360
                 this.rotation = Math.random() * 360;
+                this.rotation2 = this.rotation
                 // Gets the position according to the location (also adds to the distance so there's no chance for them to collide)
                 this.position = {
                     x: x + (s + i) * Math.cos((this.rotation - 90) * (Math.PI / 180)),
@@ -49,12 +53,22 @@ class Asteroid {
     checkVelocity() {
         // Gets the new x and y for where the asteroid is going to move next
         this.velocity = {
-            x: this.speed * 0.2 * Math.cos((this.rotation - 90) * (Math.PI / 180)),
-            y: this.speed * 0.2 * Math.sin((this.rotation - 90) * (Math.PI / 180))
+            x: this.speed * 0.2 * Math.cos((this.rotation2 - 90) * (Math.PI / 180)),
+            y: this.speed * 0.2 * Math.sin((this.rotation2 - 90) * (Math.PI / 180))
         }
         // Applies the velocity to the position
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
+    }
+    revert() {
+        // Gets the new x and y for where the asteroid is going to move next
+        this.velocity = {
+            x: this.speed * 0.2 * Math.cos((this.rotation2 - 90) * (Math.PI / 180)),
+            y: this.speed * 0.2 * Math.sin((this.rotation2 - 90) * (Math.PI / 180))
+        }
+        // Applies the velocity to the position
+        this.position.x -= this.velocity.x
+        this.position.y -= this.velocity.y
     }
     // Checks if the ship is colliding with 
     shipCollision() {
@@ -83,7 +97,7 @@ class Asteroid {
             // If the laser and the asteroid are colliding
             if (distBetweenPoints(this.position.x, this.position.y, x, y) < this.size + r) {
                 // Destroy the laser and the asteroid
-                game.superman ? 0 : las.destroy();
+                game.superman ? 0 : las.age += this.r;
                 this.destroy();
                 return true;
             }
@@ -116,6 +130,7 @@ class Asteroid {
     destroy() {
         // Push the id of this asteroid to asteroidIDs (To the last spot)
         asteroidIDs.push(this.id);
+        explode.play()
         // Gets the index of this asteroid using it's id
         var id = asteroids.findIndex(e => (e.id == this.id))
         asteroidsToDestroy.push(id);
@@ -134,10 +149,17 @@ class Asteroid {
         // Sets the stroke color
         ctx.strokeStyle = 'white';
         // Draws the asteroid
+        ctx.fillStyle = "grey"
         drawShape(this.asteroid, true, this.position.x, this.position.y, 1, (Math.PI / 180) * this.rotation + 0.35);
     }
     // Main update of the asteroid
     async update() {
+        this.rotation += this.rotate * 0.2 * this.speed
+        this.rotate += Math.random() * 0.2 - 0.1
+        if(this.rotate < -5)
+            this.rotate = -5
+        if(this.rotate > 5)
+            this.rotate = 5
         // Ckechs the velocity
         this.checkVelocity();
         // If the asteroid is off screen then warp it
@@ -147,4 +169,4 @@ class Asteroid {
         // Draws the asteroid
         this.draw();
     }
-};
+}

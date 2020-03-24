@@ -30,6 +30,7 @@ class Particle {
     draw() {
         ctx.lineWidth = this.r / 10;
         ctx.strokeStyle = 'white';
+        ctx.fillStyle = "white"
         if(this.shape){
             if(this.redraw){
                 drawShape(new Shapes(this.r).asteroid, true, this.x, this.y, 1, (Math.PI / 180) * this.rot);

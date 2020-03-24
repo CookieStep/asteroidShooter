@@ -60,39 +60,46 @@ function drawShape(shape, close, x, y, scale, rot) {
     //          x, y]
     // Saves the canvas config
     ctx.save();
-    // Defines a variable i
-    var i = 0;
-    // Horizontal scale - Bigger/Smaller
-    // Vertical/horizontal skewing - Tilting left,right,up,down
-    // Vertical scale - Bigger/Smaller
-    // Move the canvas coordinates - makes new coordinates the 0 of the canvas
-    ctx.setTransform(scale, 0, 0, scale, x, y);
-    // Rotate canvas by x degrees
-    ctx.rotate(rot);
-    // Begin drawing
-    ctx.beginPath();
-    // Move to the pen to the position x of the 0th index 
-    // Since ++ is after I (i++) it first does the operation then it adds it
-    // Something like this
-    // var i = 0;
-    // console.log(i) - returns 0
-    // i = i + 1
-    // console.log(i) - returns 1
-    // in short 
-    // console.log(i++) - returns 0
-    // console.log(i) - returns 1
-    // But if I did ++i
-    // console.log(++i) - returns 1
-    ctx.moveTo(shape[i++], shape[i++]);
-    // While i smaller than the length of shape aka how many points there are
-    while (i < shape.length) {
-        // List through all the lines and draw them at the according spot
-        ctx.lineTo(shape[i++], shape[i++]);
+    for(let a = -1; a <= 1; a++) {
+        for(let b = -1; b <= 1; b++) {
+            // Defines a variable i
+            var i = 0;
+            // Horizontal scale - Bigger/Smaller
+            // Vertical/horizontal skewing - Tilting left,right,up,down
+            // Vertical scale - Bigger/Smaller
+            // Move the canvas coordinates - makes new coordinates the 0 of the canvas
+            ctx.setTransform(scale, 0, 0, scale, x + c.width * a, y + c.height * b);
+            // Rotate canvas by x degrees
+            ctx.rotate(rot);
+            // Begin drawing
+            ctx.beginPath();
+            // Move to the pen to the position x of the 0th index 
+            // Since ++ is after I (i++) it first does the operation then it adds it
+            // Something like this
+            // var i = 0;
+            // console.log(i) - returns 0
+            // i = i + 1
+            // console.log(i) - returns 1
+            // in short 
+            // console.log(i++) - returns 0
+            // console.log(i) - returns 1
+            // But if I did ++i
+            // console.log(++i) - returns 1
+            ctx.moveTo(shape[i++], shape[i++]);
+            // While i smaller than the length of shape aka how many points there are
+            while (i < shape.length) {
+                // List through all the lines and draw them at the according spot
+                ctx.lineTo(shape[i++], shape[i++]);
+            }
+            // If close is true then close the path from the last point
+            if (close) { ctx.closePath() }
+            // Draw the lines on the screen
+            ctx.strokeStyle = game.color ? ctx.fillStyle : ctx.strokeStyle
+            ctx.fillStyle = game.color ? ctx.fillStyle : "black"
+            if(game.fill) ctx.fill()
+            ctx.stroke()
+        }
     }
-    // If close is true then close the path from the last point
-    if (close) { ctx.closePath() }
-    // Draw the lines on the screen
-    ctx.stroke();
     // Restore the configuration from the last save
     ctx.restore();
 }
@@ -114,7 +121,16 @@ function offScreen(object) {
 
 // Gets the distance between two points
 function distBetweenPoints(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    let dx = x2 - x1
+    let dy = y2 - y1
+    if(dx > c.width / 2)
+        dx -= c.width
+    if(dy > c.height / 2)
+        dy -= c.height
+    return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+}
+function distance(obj, obj2) {
+    return distBetweenPoints(obj.position.x, obj.position.y, obj2.position.x, obj2.position.y)
 }
 
 // Create asteroids
@@ -145,7 +161,7 @@ function createLaser(x, y, s, rot, or){
 }
 
 // Function that creates the asteroid
-function createAsteroid(x, y, s, split = false) {
+function createAsteroid(x, y, s, split = false, points) {
     // Defining the variable id
     var id;
     // cid (Check ID) - Id of the asteroid created before this one
@@ -160,7 +176,7 @@ function createAsteroid(x, y, s, split = false) {
         id = asteroidIDs.shift();
     }
     // Add the asteroid to the array
-    asteroids.push(new Asteroid(x, y, s, id, split, cid))
+    asteroids.push(new Asteroid(x, y, s, id, split, cid, points))
 }
 
 // Keymap of pressed keys
@@ -215,6 +231,13 @@ function resizeCanvas(){
     c.height = window.innerHeight;
 }
 
+function audio() {
+    started = true
+    game.pause()
+    game.resume()
+    window.removeEventListener("mousemove", audio)
+}
+
 // Call keydown() while a key is pressed
 window.addEventListener("keydown", keydown, false);
 // Call keyup() when a key is released
@@ -224,17 +247,22 @@ window.addEventListener("blur", lostFocus);
 // Calls resizeCanva() on window resize
 window.addEventListener("resize", resizeCanvas);
 
+window.addEventListener("mousemove", audio)
+
 // Main game handler
 var game = {
     // Is the game paused
     paused: false,
     running: false,
     // Infinite mode of the game
-    infinite: true,
+    infinite: false,
     // Superman mode (no shoot delay, no collision, no hearts)
     superman: false,
     // Warp the bullet
-    warp: false,
+    warp: true,
+    // Color the game
+    color : true,
+    fill : false,
     // Start the game
     start: function (r) {
         // If the game is already running don't do anything

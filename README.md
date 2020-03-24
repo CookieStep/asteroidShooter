@@ -1,8 +1,7 @@
 # asteroidShooter
-Doggos class project :3 mine is better
+Not mine (clearly)
+Major changes are optional (For obvious reasons)
 
 ### How to play
 - Use W|A|S|D to move
 - Use space to shoot
-
-Going in the console and writing "game." gives you some options

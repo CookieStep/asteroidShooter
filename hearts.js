@@ -9,6 +9,7 @@ class Heart {
     draw() {
         ctx.lineWidth = this.r / 10;
         ctx.strokeStyle = 'white';
+        ctx.fillStyle = "green"
         var heart =
         [
             0, this.r,
